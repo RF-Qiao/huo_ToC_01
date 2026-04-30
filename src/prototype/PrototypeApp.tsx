@@ -133,6 +133,7 @@ import {
 } from '../components/prototype';
 import { HeroDetailView } from '../features/heroes';
 import { TicketBookingView } from '../features/ticketing';
+import { CommunityView } from '../features/community';
 
 // --- Types ---
 
@@ -8068,6 +8069,11 @@ export default function App() {
                 onBookTicket={() => {
                   setShowTicketBooking(true);
                 }}
+              />
+            )}
+            {currentPage === '社区' && (
+              <CommunityView
+                onMessage={() => setShowMessageCenter(true)}
               />
             )}
             {currentPage === '内容' && <ContentView activeTab={activeTab} onSelectEvent={setSelectedEvent} />}

@@ -8,6 +8,7 @@ type BottomNavProps = {
 const tabs = [
   { icon: 'home', label: '首页', id: '首页' },
   { icon: 'flame', label: '体验', id: '体验' },
+  { icon: 'compass', label: '社区', id: '社区' },
   { icon: 'crown', label: '英雄', id: '英雄' },
   { icon: 'users', label: '队伍', id: '队伍' },
   { icon: 'user', label: '我的', id: '我' },
