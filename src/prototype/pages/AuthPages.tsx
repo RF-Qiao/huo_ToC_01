@@ -124,49 +124,79 @@ type AuthSelectorPageProps = {
 
 export function AuthSelectorPage({ agreed, onToggleAgreed, onWechatLogin, onPhoneLogin, onPreview }: AuthSelectorPageProps) {
   return (
-    <div className="min-h-screen bg-[#FBF9F8] px-8 flex flex-col">
-      <div className="flex-1 flex flex-col items-center justify-center py-20">
-        <div className="w-24 h-24 bg-[#9C1B1F] rounded-[40px] flex items-center justify-center shadow-2xl mb-8">
-          <Flame size={48} className="text-[#FFD36B]" />
-        </div>
-        <h2 className="text-3xl font-black text-[#38100E]">登录黄火火</h2>
-        <p className="mt-2 text-sm font-bold text-[#8C6A58]/60">开启你的英雄体验</p>
+    <div className="min-h-dvh bg-gradient-to-b from-[#FFF5EC] via-[#FFFAF5] to-white flex flex-col overflow-hidden relative w-full max-w-md mx-auto">
+      {/* 柔和装饰元素 */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-32 -right-16 w-72 h-72 bg-[#FFE0C8]/40 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 -left-20 w-56 h-56 bg-[#FFECD2]/30 rounded-full blur-2xl" />
+        <div className="absolute top-[55%] right-1/4 w-32 h-32 bg-[#F5A623]/10 rounded-full blur-2xl" />
+      </div>
 
-        <div className="w-full mt-16 space-y-4">
-          <button
-            onClick={onWechatLogin}
-            className={`w-full h-16 rounded-3xl bg-[#07C160] text-white font-black text-sm flex items-center justify-center gap-3 active:scale-95 transition-all ${!agreed ? 'opacity-50' : ''}`}
-          >
-            <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
-              <MessageCircle size={16} fill="white" />
-            </div>
-            微信一键登录
-          </button>
-          <button
-            onClick={onPhoneLogin}
-            className={`w-full h-16 rounded-3xl bg-white border border-black/5 text-[#38100E] font-black text-sm flex items-center justify-center gap-3 active:scale-95 transition-all ${!agreed ? 'opacity-50' : ''}`}
-          >
-            <Smartphone size={20} />
-            手机号登录
-          </button>
-          <button onClick={onPreview} className="w-full h-12 text-[#8C6A58]/40 font-black text-xs uppercase tracking-widest">
-            先看看
-          </button>
+      {/* 顶部品牌区域 */}
+      <div className="flex-1 flex flex-col items-center justify-center px-6 sm:px-8 relative z-10 min-h-0 py-4">
+        {/* Logo 容器 */}
+        <div className="relative mb-6 sm:mb-8">
+          <div className="absolute inset-0 bg-[#F5A623]/15 rounded-full blur-2xl scale-150" />
+          <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-[#FFFAF0] to-[#FFF5EC] rounded-full flex items-center justify-center shadow-lg shadow-[#F5A623]/10 relative border border-[#FFE0C8]/50">
+            <Flame size={38} className="text-[#F5A623] sm:size-11" />
+          </div>
+        </div>
+
+        <h2 className="text-[28px] sm:text-[32px] font-extrabold text-[#1A1A1A] tracking-tight">黄火火</h2>
+        <p className="mt-2 sm:mt-2.5 text-sm sm:text-[15px] font-medium text-[#B0A097]">开启你的英雄体验之旅</p>
+
+        {/* 特性标签 */}
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-2.5 mt-8 sm:mt-10">
+          {['文化探索', '沉浸打卡', '英雄挑战'].map((tag) => (
+            <span key={tag} className="px-3 sm:px-4 py-1.5 sm:py-2 bg-[#FFF5EC] rounded-full text-[11px] sm:text-xs font-semibold text-[#E8963A] border border-[#FFE0C8]/60">
+              {tag}
+            </span>
+          ))}
         </div>
       </div>
 
-      <div className="py-12 flex items-start gap-3">
+      {/* 底部登录卡片 */}
+      <div className="relative z-10 bg-white rounded-t-[28px] sm:rounded-t-[32px] px-5 sm:px-7 pt-7 sm:pt-9 pb-[max(2.5rem,env(safe-area-inset-bottom,2.5rem))] flex flex-col gap-2.5 sm:gap-3 shadow-[0_-8px_40px_rgba(0,0,0,0.04)]">
+        {/* 手机号登录 */}
         <button
-          onClick={onToggleAgreed}
-          className={`w-5 h-5 rounded-md border-2 shrink-0 transition-colors flex items-center justify-center ${agreed ? 'bg-[#9C1B1F] border-[#9C1B1F] text-[#FFD36B]' : 'border-black/5'}`}
+          onClick={onPhoneLogin}
+          disabled={!agreed}
+          className="w-full h-12 sm:h-[52px] rounded-2xl bg-gradient-to-r from-[#F5A623] to-[#F0901E] text-white font-semibold text-sm sm:text-[15px] flex items-center justify-center gap-2 sm:gap-2.5 active:scale-[0.98] transition-all disabled:opacity-40 shadow-[0_8px_24px_rgba(245,166,35,0.25)]"
         >
-          {agreed && <Check size={14} strokeWidth={4} />}
+          <Smartphone size={18} className="sm:size-5" />
+          手机号登录
         </button>
-        <div className="text-[10px] font-bold text-[#8C6A58]/60 leading-relaxed">
-          我已阅读并同意：
-          <br />
-          <span className="text-[#38100E] underline">《用户协议》</span> 与 <span className="text-[#38100E] underline">《隐私政策》</span>
+
+        {/* 微信登录 */}
+        <button
+          onClick={onWechatLogin}
+          disabled={!agreed}
+          className="w-full h-12 sm:h-[52px] rounded-2xl bg-[#F7F7F7] text-[#1A1A1A] font-semibold text-sm sm:text-[15px] flex items-center justify-center gap-2 sm:gap-2.5 active:scale-[0.98] transition-all disabled:opacity-40"
+        >
+          <MessageCircle size={18} className="text-[#07C160] sm:size-5" />
+          微信一键登录
+        </button>
+
+        {/* 协议勾选 */}
+        <div className="flex items-start gap-2 sm:gap-2.5 py-2 sm:py-2.5">
+          <button
+            onClick={onToggleAgreed}
+            className={`w-[18px] h-[18px] rounded-md border-2 shrink-0 flex items-center justify-center mt-px transition-colors ${
+              agreed ? 'bg-[#F5A623] border-[#F5A623] text-white' : 'border-[#DDD]'
+            }`}
+          >
+            {agreed && <Check size={11} strokeWidth={4} />}
+          </button>
+          <span className="text-[10px] sm:text-[11px] text-[#B0A097] leading-relaxed">
+            我已阅读并同意
+            <span className="text-[#8B7B72] font-semibold underline decoration-[#DDD] underline-offset-2">《用户协议》</span> 与 <span className="text-[#8B7B72] font-semibold underline decoration-[#DDD] underline-offset-2">《隐私政策》</span>
+          </span>
         </div>
+
+        {/* 先看看 */}
+        <button onClick={onPreview} className="w-full py-2.5 sm:py-3 text-[#C4B8AE] font-semibold text-xs sm:text-[13px] tracking-wide">
+          先看看
+        </button>
       </div>
     </div>
   );
@@ -196,32 +226,60 @@ export function PhoneLoginPage({ onBack, onSubmit }: PhoneLoginPageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-white px-8 pt-20">
-      <button onClick={onBack} className="mb-12 p-2 -ml-2">
-        <ArrowLeft size={24} strokeWidth={3} className="text-[#38100E]" />
-      </button>
-      <h2 className="text-3xl font-black text-[#38100E]">手机号登录</h2>
-      <p className="mt-2 text-sm font-bold text-[#8C6A58]/40 mb-12">未注册手机号将自动创建账号</p>
+    <div className="min-h-dvh bg-gradient-to-b from-[#FFF5EC] to-white flex flex-col w-full max-w-md mx-auto">
+      {/* 顶部导航区 */}
+      <div className="px-5 sm:px-7 pt-[max(3rem,env(safe-area-inset-top,3rem))] pb-4 sm:pb-6">
+        <button onClick={onBack} className="p-2 -ml-2 mb-4 sm:mb-6">
+          <ArrowLeft size={22} strokeWidth={2.5} className="text-[#1A1A1A] sm:size-6" />
+        </button>
+        <h2 className="text-[26px] sm:text-[28px] font-extrabold text-[#1A1A1A] tracking-tight">手机号登录</h2>
+        <p className="mt-1 sm:mt-1.5 text-[13px] sm:text-sm font-medium text-[#B0A097]">未注册手机号将自动创建账号</p>
+      </div>
 
-      <div className="space-y-6">
-        <div className="bg-[#FBF9F8] rounded-2xl p-5 border border-black/5 focus-within:border-[#9C1B1F] transition-all">
-          <label className="text-[10px] font-black text-[#8C6A58]/20 uppercase tracking-widest">Phone Number</label>
-          <input type="tel" placeholder="请输入手机号" value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full text-base font-black text-[#38100E] outline-none bg-transparent mt-1" />
+      {/* 表单区域 */}
+      <div className="flex-1 px-5 sm:px-7 pt-4 sm:pt-6 space-y-3.5 sm:space-y-4">
+        <div className="bg-[#F8F6F4] rounded-2xl p-4 sm:p-5 border border-transparent focus-within:border-[#F5A623]/40 focus-within:bg-[#FEFAF5] transition-all duration-200">
+          <label className="text-[10px] sm:text-[11px] font-semibold text-[#C4B8AE] uppercase tracking-wider">手机号</label>
+          <input
+            type="tel"
+            placeholder="请输入手机号"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            className="w-full text-sm sm:text-[15px] font-semibold text-[#1A1A1A] outline-none bg-transparent mt-1 sm:mt-1.5 placeholder:text-[#D4CCC4]"
+          />
         </div>
-        <div className="flex gap-4">
-          <div className="flex-1 bg-[#FBF9F8] rounded-2xl p-5 border border-black/5 focus-within:border-[#9C1B1F] transition-all">
-            <label className="text-[10px] font-black text-[#8C6A58]/20 uppercase tracking-widest">Code</label>
-            <input type="text" placeholder="输入验证码" value={code} onChange={(e) => setCode(e.target.value)} className="w-full text-base font-black text-[#38100E] outline-none bg-transparent mt-1" />
+
+        <div className="flex gap-2.5 sm:gap-3">
+          <div className="flex-1 bg-[#F8F6F4] rounded-2xl p-4 sm:p-5 border border-transparent focus-within:border-[#F5A623]/40 focus-within:bg-[#FEFAF5] transition-all duration-200">
+            <label className="text-[10px] sm:text-[11px] font-semibold text-[#C4B8AE] uppercase tracking-wider">验证码</label>
+            <input
+              type="text"
+              placeholder="输入验证码"
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              className="w-full text-sm sm:text-[15px] font-semibold text-[#1A1A1A] outline-none bg-transparent mt-1 sm:mt-1.5 placeholder:text-[#D4CCC4]"
+            />
           </div>
-          <button onClick={startTimer} disabled={count > 0 || phone.length < 11} className="px-6 bg-[#38100E] text-[#FFD36B] rounded-2xl text-[10px] font-black uppercase tracking-widest disabled:opacity-50">
-            {count > 0 ? `${count}s` : '获取验证码'}
+          <button
+            onClick={startTimer}
+            disabled={count > 0 || phone.length < 11}
+            className="shrink-0 self-stretch px-4 sm:px-5 bg-[#FFF5EC] text-[#E8963A] rounded-2xl text-xs sm:text-[13px] font-semibold disabled:opacity-40 active:scale-95 transition-all border border-[#FFE0C8]/60"
+          >
+            {count > 0 ? `${count}s后重发` : '获取验证码'}
           </button>
         </div>
       </div>
 
-      <button onClick={onSubmit} disabled={!phone || !code} className="w-full h-16 rounded-3xl bg-[#9C1B1F] text-[#FFD36B] font-black text-sm mt-12 shadow-xl shadow-[#9C171D]/20 active:scale-95 transition-all disabled:opacity-50">
-        登录
-      </button>
+      {/* 登录按钮 */}
+      <div className="px-5 sm:px-7 pt-6 sm:pt-8 pb-[max(2rem,env(safe-area-inset-bottom,2rem))]">
+        <button
+          onClick={onSubmit}
+          disabled={!phone || !code}
+          className="w-full h-12 sm:h-[52px] rounded-2xl bg-gradient-to-r from-[#F5A623] to-[#F0901E] text-white font-semibold text-sm sm:text-[15px] shadow-[0_8px_24px_rgba(245,166,35,0.25)] active:scale-[0.98] transition-all disabled:opacity-40 disabled:shadow-none"
+        >
+          登录
+        </button>
+      </div>
     </div>
   );
 }

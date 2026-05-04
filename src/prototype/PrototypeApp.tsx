@@ -2583,7 +2583,7 @@ export default function App() {
   
   // --- Auth & Onboarding State ---
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [appPhase, setAppPhase] = useState<AppPhase>('splash');
+  const [appPhase, setAppPhase] = useState<AppPhase>('auth');
   const [authStep, setAuthStep] = useState<AuthStep>(DEFAULT_AUTH_STEP);
   const [userProfile, setUserProfile] = useState(DEFAULT_USER_PROFILE);
   const [agreed, setAgreed] = useState(false);
