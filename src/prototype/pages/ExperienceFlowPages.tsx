@@ -9,7 +9,9 @@ import {
   Check,
   Dna,
   Flame,
+  Download,
   HelpCircle,
+  Home,
   Info,
   Map as MapIcon,
   MapPin,
@@ -17,8 +19,14 @@ import {
   MoreHorizontal,
   Navigation,
   RefreshCw,
+  Share2,
+  History,
+  Timer,
+  Trophy,
+  TrendingUp,
   Watch,
   X,
+  Star,
 } from 'lucide-react';
 import { ProtoIcon } from '../../components/prototype';
 
@@ -657,9 +665,9 @@ export function MapCheckInPage({ onClose, onCheckedIn }: MapCheckInPageProps) {
           <motion.div
             animate={{ scale: [1, 1.2, 1] }}
             transition={{ repeat: Infinity, duration: 2 }}
-            className="absolute bottom-32 left-24 w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center border-2 border-white shadow-lg"
+            className="absolute bottom-32 left-24 w-8 h-8 rounded-full bg-[#9C1B1F]/20 flex items-center justify-center border-2 border-white shadow-lg"
           >
-            <div className="w-3 h-3 rounded-full bg-blue-500" />
+            <div className="w-3 h-3 rounded-full bg-[#9C1B1F]" />
           </motion.div>
 
           <div className="absolute top-40 right-24">
@@ -1063,6 +1071,220 @@ export function TaskCompletePage({ onClose, onNext, onViewProgress }: TaskComple
           </button>
         </div>
       </footer>
+    </motion.div>
+  );
+}
+
+type RaceResultPageProps = {
+  onClose: () => void;
+  onGoHome: () => void;
+  onShowMallHome: () => void;
+};
+
+export function RaceResultPage({ onClose, onGoHome, onShowMallHome }: RaceResultPageProps) {
+  const [showPoster, setShowPoster] = useState(false);
+
+  return (
+    <motion.div
+      initial={{ x: '100%' }}
+      animate={{ x: 0 }}
+      exit={{ x: '100%' }}
+      className="fixed inset-0 z-[1100] bg-[#FBF9F8] overflow-y-auto flex flex-col"
+    >
+      <div className="h-[45vh] relative shrink-0 overflow-hidden bg-[#38100E]">
+        <img
+          src="https://images.unsplash.com/photo-1599599810694-b5b3aa44a97d?q=80&w=2600&auto=format&fit=crop"
+          className="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay scale-110"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#9C1B1F]/80 via-transparent to-[#FBF9F8]" />
+
+        <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
+          <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }}>
+            <span className="text-[10px] font-black text-[#FFD36B] uppercase tracking-[.4em] mb-3 block">Hero's Journey Complete</span>
+            <h1 className="text-4xl font-black text-white tracking-tighter mb-2">恭喜完赛！</h1>
+            <p className="text-white/70 font-bold">你已成功完成 霍去病英雄体验</p>
+          </motion.div>
+
+          <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.5, type: 'spring' }} className="mt-10 relative">
+            <div className="absolute inset-0 bg-[#FFD36B] rounded-full blur-[60px] opacity-20" />
+            <div className="w-40 h-40 rounded-full bg-gradient-to-br from-[#FFD36B] to-[#F5DDA2] p-1 shadow-2xl relative z-10">
+              <div className="w-full h-full rounded-full bg-[#38100E] flex flex-col items-center justify-center border-4 border-[#FFD36B]/20">
+                <Trophy size={56} className="text-[#FFD36B] mb-2" fill="currentColor" />
+                <span className="text-[10px] font-black text-[#FFD36B] uppercase tracking-widest">Champion Hou</span>
+              </div>
+            </div>
+            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[#9C1B1F] text-white px-4 py-1.5 rounded-full text-[10px] font-black shadow-xl border-2 border-white">
+              获得最高成就勋章
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
+      <div className="px-6 pb-40 -mt-8 relative z-20 space-y-6">
+        <div className="bg-white rounded-[40px] p-8 text-center border border-black/5 shadow-xl shadow-black/5">
+          <h2 className="text-2xl font-black text-[#38100E]">冠军侯火种勋章</h2>
+          <p className="text-[#8C6A58]/50 text-[10px] font-black uppercase tracking-[0.2em] mt-1">Earned Today · {new Date().toLocaleDateString()}</p>
+          <p className="mt-4 text-xs font-bold text-[#8C6A58] leading-relaxed px-4">
+            本勋章颁发给完成「封狼居胥」英雄路线全部 6 项挑战的勇者。你已证明了自己的智慧、勇气与耐力。
+          </p>
+        </div>
+
+        <div className="space-y-4">
+          <div className="flex items-center justify-between px-2">
+            <h3 className="text-sm font-black text-[#38100E]">体验战报</h3>
+            <span className="text-[10px] font-black text-[#8C6A58]/40">冠军侯小队</span>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            {[
+              { label: '完成任务', val: '6/6', icon: <Award size={16} /> },
+              { label: '总用时', val: '86 min', icon: <Timer size={16} /> },
+              { label: '获得火种', val: '60', icon: <Flame size={16} fill="currentColor" /> },
+              { label: '获得银票', val: '30', icon: <History size={16} /> },
+              { label: '心流峰值', val: '88', icon: <Activity size={16} /> },
+              { label: '超越玩家', val: '92%', icon: <TrendingUp size={16} /> },
+            ].map((stat, index) => (
+              <div key={index} className="bg-white rounded-3xl p-5 border border-black/5 shadow-sm flex items-center gap-4">
+                <div className="w-10 h-10 rounded-2xl bg-[#FBF9F8] flex items-center justify-center text-[#9C1B1F]">
+                  {stat.icon}
+                </div>
+                <div>
+                  <span className="text-[10px] font-black text-[#8C6A58]/40 block">{stat.label}</span>
+                  <span className="text-base font-black text-[#38100E]">{stat.val}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="p-8 bg-[#38100E] rounded-[40px] text-[#FFD36B] relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-[#9C1B1F]/20 rounded-full -mr-16 -mt-16 blur-3xl" />
+          <h3 className="font-black mb-3 flex items-center gap-2 italic">
+            <Star size={16} fill="currentColor" />
+            你的英雄时刻
+          </h3>
+          <p className="text-xs font-bold leading-relaxed opacity-80">
+            从最初的「誓师出征」开始，你率领小队深入漠北，经历「漠北追击」落点与「战鼓挑战」的热血。今日登顶，完成「封狼居胥」的终极跨越，这是一场属于你的英雄成长之旅，未来大路，必有回响。
+          </p>
+        </div>
+
+        <section className="space-y-4">
+          <div className="flex items-center gap-2">
+            <span className="w-1 h-3 bg-[#9C1B1F] rounded-full" />
+            <h3 className="text-sm font-black text-[#38100E]">解锁限定纪念</h3>
+          </div>
+          <div className="bg-white rounded-[40px] p-6 border-2 border-[#9C1B1F]/10 shadow-lg relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-[#FFD36B]/10 rounded-full -mr-12 -mt-12 blur-2xl" />
+            <div className="flex gap-4">
+              <div className="w-24 h-24 rounded-2xl bg-gray-50 overflow-hidden shrink-0 shadow-inner">
+                <img src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=2670&auto=format&fit=crop" className="w-full h-full object-cover" />
+              </div>
+              <div className="flex-1 space-y-2">
+                <h4 className="text-sm font-black text-[#38100E]">霍去病实体纪念勋章</h4>
+                <p className="text-[10px] font-bold text-[#8C6A58]/60 leading-relaxed">完成霍去病英雄体验后，你已解锁专属实体纪念购买资格。</p>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-black text-[#9C1B1F]">¥39</span>
+                  <span className="px-2 py-0.5 rounded-lg bg-green-50 text-[9px] font-black text-green-600 uppercase">已解锁</span>
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={onShowMallHome}
+              className="w-full h-12 rounded-2xl bg-[#9C1B1F] text-[#FFD36B] font-black text-xs mt-6 shadow-xl shadow-[#9C171D]/10 active:scale-95 transition-all uppercase tracking-widest"
+            >
+              去火种商城看看
+            </button>
+          </div>
+        </section>
+
+        <div className="flex gap-4 pb-12">
+          <button
+            onClick={() => setShowPoster(true)}
+            className="flex-1 h-14 rounded-2xl bg-white border-2 border-[#9C1B1F]/20 text-[#9C1B1F] font-black text-xs flex items-center justify-center gap-2 active:scale-95 transition-all"
+          >
+            <Share2 size={16} />
+            生成分享海报
+          </button>
+          <button
+            onClick={onGoHome}
+            className="flex-1 h-14 rounded-2xl bg-white border-2 border-black/5 text-[#38100E] font-black text-xs flex items-center justify-center gap-2 active:scale-95 transition-all"
+          >
+            <Home size={16} />
+            返回首页
+          </button>
+        </div>
+      </div>
+
+      <footer className="fixed bottom-0 left-0 right-0 p-6 bg-white/95 backdrop-blur-xl border-t border-black/5 flex flex-col gap-3 z-30">
+        <button className="w-full h-14 rounded-2xl bg-[#9C1B1F] text-[#FFD36B] font-black text-sm shadow-xl active:scale-95 transition-all">
+          查看我的勋章
+        </button>
+        <button onClick={onGoHome} className="w-full h-14 rounded-2xl bg-[#FBF9F8] text-[#8C6A58] font-black text-sm active:scale-95 transition-all">
+          返回首页
+        </button>
+      </footer>
+
+      <AnimatePresence>
+        {showPoster && (
+          <div className="fixed inset-0 z-[1200] flex items-center justify-center px-6">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowPoster(false)} className="absolute inset-0 bg-black/80 backdrop-blur-md" />
+            <motion.div initial={{ scale: 0.9, y: 30 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 30 }} className="relative w-full max-w-sm">
+              <div className="bg-[#38100E] rounded-[48px] overflow-hidden shadow-2xl p-1">
+                <div className="bg-white rounded-[46px] overflow-hidden flex flex-col aspect-[4/6]">
+                  <div className="h-2/5 bg-[#9C1B1F] relative overflow-hidden p-8 flex flex-col justify-end">
+                    <img src="https://images.unsplash.com/photo-1599599810694-b5b3aa44a97d?q=80&w=2600&auto=format&fit=crop" className="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-overlay" />
+                    <div className="relative z-10">
+                      <span className="text-[10px] font-black text-[#FFD36B] uppercase tracking-widest">Huo Qubing Experience</span>
+                      <h2 className="text-3xl font-black text-white italic">封狼居胥 · 终极见证</h2>
+                    </div>
+                  </div>
+                  <div className="flex-1 p-8 flex flex-col items-center text-center">
+                    <div className="w-24 h-24 rounded-full bg-[#38100E] flex items-center justify-center border-4 border-[#FFD36B] shadow-lg -mt-20 relative z-20">
+                      <Trophy size={32} className="text-[#FFD36B]" fill="currentColor" />
+                    </div>
+                    <h3 className="mt-4 text-xl font-black text-[#38100E]">冠军侯火种勋章</h3>
+                    <p className="text-[9px] font-black text-[#8C6A58]/40 uppercase tracking-[0.2em] mt-1">Earned by {new Date().toLocaleDateString()}</p>
+                    <div className="w-full h-[1px] bg-black/5 my-6" />
+                    <div className="grid grid-cols-2 gap-x-8 gap-y-4 w-full">
+                      <div className="text-left">
+                        <span className="text-[10px] font-bold text-[#8C6A58]/40 block">完成任务</span>
+                        <span className="text-2xl font-black text-[#38100E]">6/6</span>
+                      </div>
+                      <div className="text-left">
+                        <span className="text-[10px] font-bold text-[#8C6A58]/40 block">心流峰值</span>
+                        <span className="text-2xl font-black text-[#38100E]">88</span>
+                      </div>
+                    </div>
+                    <div className="mt-auto flex items-end justify-between w-full">
+                      <div className="text-left">
+                        <div className="flex items-center gap-2 mb-1">
+                          <Flame size={12} fill="#9C1B1F" className="text-[#9C1B1F]" />
+                          <span className="text-xs font-black text-[#38100E]">黄火火 · 智慧文旅</span>
+                        </div>
+                        <p className="text-[8px] font-bold text-[#8C6A58]/60 leading-tight">
+                          扫描左侧二维码<br />开启你的英雄之旅
+                        </p>
+                      </div>
+                      <div className="w-16 h-16 bg-[#FBF9F8] rounded-xl border border-black/5 p-2 shrink-0">
+                        <QrCode size="100%" className="text-[#38100E]" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex gap-4 mt-6">
+                <button className="flex-1 h-14 rounded-2xl bg-[#9C1B1F] text-[#FFD36B] font-black text-sm flex items-center justify-center gap-2 shadow-xl shadow-black/20">
+                  <Download size={18} />
+                  保存海报
+                </button>
+                <button className="flex-1 h-14 rounded-2xl bg-white text-[#38100E] font-black text-sm flex items-center justify-center gap-2">
+                  <Share2 size={18} />
+                  分享好友
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }

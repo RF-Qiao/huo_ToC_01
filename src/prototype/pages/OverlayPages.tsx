@@ -390,7 +390,7 @@ export function MessageCenterPage({ onClose }: SimplePageProps) {
                 <div className={`w-12 h-12 rounded-2xl shrink-0 flex items-center justify-center relative 
                   ${msg.type === '任务' ? 'bg-orange-50 text-orange-500' :
                     msg.type === '订单' ? 'bg-green-50 text-green-500' :
-                    msg.type === '队伍' ? 'bg-blue-50 text-blue-500' : 'bg-gray-50 text-gray-400'}`}>
+                    msg.type === '队伍' ? 'bg-[#FFF1D0] text-[#9C1B1F]' : 'bg-gray-50 text-gray-400'}`}>
                   {msg.icon}
                   {msg.unread && <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white" />}
                 </div>
@@ -425,7 +425,7 @@ export function MessageCenterPage({ onClose }: SimplePageProps) {
                 <div className={`w-14 h-14 rounded-2xl flex items-center justify-center
                   ${selectedMsg.type === '任务' ? 'bg-orange-50 text-orange-500' :
                     selectedMsg.type === '订单' ? 'bg-green-50 text-green-500' :
-                    selectedMsg.type === '队伍' ? 'bg-blue-50 text-blue-500' : 'bg-gray-50 text-gray-400'}`}>
+                    selectedMsg.type === '队伍' ? 'bg-[#FFF1D0] text-[#9C1B1F]' : 'bg-gray-50 text-gray-400'}`}>
                   {selectedMsg.icon}
                 </div>
                 <div>

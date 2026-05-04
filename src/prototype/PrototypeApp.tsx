@@ -148,13 +148,15 @@ import {
   WelcomePage,
 } from './pages/AuthPages';
 import { DesignSystemPage } from './pages/DesignSystemPage';
-import { CurrentExperiencePage, MapCheckInPage, PaymentSuccessPage, PhotoSubmissionPage, TaskCompletePage, TaskDetailsPage, VerificationCodePage } from './pages/ExperienceFlowPages';
+import { CurrentExperiencePage, MapCheckInPage, PaymentSuccessPage, PhotoSubmissionPage, RaceResultPage, TaskCompletePage, TaskDetailsPage, VerificationCodePage } from './pages/ExperienceFlowPages';
 import { ContentPage, EventDetailPage, type ContentEvent } from './pages/EventPages';
 import { MessagePage } from './pages/MessagePage';
 import { MessageCenterPage, SceneSelectionPage, SettingsPage } from './pages/OverlayPages';
 import { MyExperiencesPage, MyMedalsPage, MyOrdersPage } from './pages/ProfilePages';
 import { AgreementPage, FeedbackPage, HelpCenterPage, PermissionsListPage, PrivacyPolicyPage } from './pages/SupportPages';
 import { CreateTeamPage, JoinTeamPage, TeamDetailsPage, TeamHomePage } from './pages/TeamPages';
+import { BindingSuccessPage, FlowStatusPage, SearchDevicePage, WristbandBindingPage } from './pages/WristbandPages';
+import { MallHomePage } from './pages/MallPages';
 
 const isDevMode = import.meta.env.DEV;
 
@@ -214,533 +216,9 @@ function CurrentExperience({ onShowDetail }: { onShowDetail: () => void }) {
 
 // --- Prototypes ---
 
-const RaceResultView = ({ onClose, onGoHome, onShowMallHome }: { onClose: () => void, onGoHome: () => void, onShowMallHome: () => void }) => {
-  const [showPoster, setShowPoster] = useState(false);
-
-  return (
-    <motion.div 
-      initial={{ x: '100%' }}
-      animate={{ x: 0 }}
-      exit={{ x: '100%' }}
-      className="fixed inset-0 z-[1100] bg-[#FBF9F8] overflow-y-auto flex flex-col"
-    >
-      {/* 1. 顶部荣誉区 */}
-      <div className="h-[45vh] relative shrink-0 overflow-hidden bg-[#38100E]">
-        <img 
-          src="https://images.unsplash.com/photo-1599599810694-b5b3aa44a97d?q=80&w=2600&auto=format&fit=crop" 
-          className="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay scale-110"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#9C1B1F]/80 via-transparent to-[#FBF9F8]" />
-        
-        <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.2 }}
-          >
-            <span className="text-[10px] font-black text-[#FFD36B] uppercase tracking-[.4em] mb-3 block">Hero's Journey Complete</span>
-            <h1 className="text-4xl font-black text-white tracking-tighter mb-2">恭喜完赛！</h1>
-            <p className="text-white/70 font-bold">你已成功完成 霍去病英雄体验</p>
-          </motion.div>
-
-          {/* 勋章展示区 */}
-          <motion.div 
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.5, type: 'spring' }}
-            className="mt-10 relative"
-          >
-            <div className="absolute inset-0 bg-[#FFD36B] rounded-full blur-[60px] opacity-20" />
-            <div className="w-40 h-40 rounded-full bg-gradient-to-br from-[#FFD36B] to-[#F5DDA2] p-1 shadow-2xl relative z-10">
-              <div className="w-full h-full rounded-full bg-[#38100E] flex flex-col items-center justify-center border-4 border-[#FFD36B]/20">
-                 <Trophy size={56} className="text-[#FFD36B] mb-2" fill="currentColor" />
-                 <span className="text-[10px] font-black text-[#FFD36B] uppercase tracking-widest">Champion Hou</span>
-              </div>
-            </div>
-            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[#9C1B1F] text-white px-4 py-1.5 rounded-full text-[10px] font-black shadow-xl border-2 border-white">
-               获得最高成就勋章
-            </div>
-          </motion.div>
-        </div>
-      </div>
-
-      <div className="px-6 pb-40 -mt-8 relative z-20 space-y-6">
-        {/* 勋章详述 */}
-        <div className="bg-white rounded-[40px] p-8 text-center border border-black/5 shadow-xl shadow-black/5">
-           <h2 className="text-2xl font-black text-[#38100E]">冠军侯火种勋章</h2>
-           <p className="text-[#8C6A58]/50 text-[10px] font-black uppercase tracking-[0.2em] mt-1">Earned Today · {new Date().toLocaleDateString()}</p>
-           <p className="mt-4 text-xs font-bold text-[#8C6A58] leading-relaxed px-4">
-             本勋章颁发给完成「封狼居胥」英雄路线全部 6 项挑战的勇者。你已证明了自己的智慧、勇气与耐力。
-           </p>
-        </div>
-
-        {/* 3. 本次体验数据区 */}
-        <div className="space-y-4">
-           <div className="flex items-center justify-between px-2">
-              <h3 className="text-sm font-black text-[#38100E]">体验战报</h3>
-              <span className="text-[10px] font-black text-[#8C6A58]/40">冠军侯小队</span>
-           </div>
-           <div className="grid grid-cols-2 gap-4">
-              {[
-                { label: '完成任务', val: '6/6', icon: <Award size={16} /> },
-                { label: '总用时', val: '86 min', icon: <Timer size={16} /> },
-                { label: '获得火种', val: '60', icon: <Flame size={16} fill="currentColor" /> },
-                { label: '获得银票', val: '30', icon: <History size={16} /> },
-                { label: '心流峰值', val: '88', icon: <Activity size={16} /> },
-                { label: '超越玩家', val: '92%', icon: <TrendingUp size={16} /> }
-              ].map((stat, i) => (
-                <div key={i} className="bg-white rounded-3xl p-5 border border-black/5 shadow-sm flex items-center gap-4">
-                   <div className="w-10 h-10 rounded-2xl bg-[#FBF9F8] flex items-center justify-center text-[#9C1B1F]">
-                      {stat.icon}
-                   </div>
-                   <div>
-                      <span className="text-[10px] font-black text-[#8C6A58]/40 block">{stat.label}</span>
-                      <span className="text-base font-black text-[#38100E]">{stat.val}</span>
-                   </div>
-                </div>
-              ))}
-           </div>
-        </div>
-
-        {/* 4. 英雄成长总结区 */}
-        <div className="p-8 bg-[#38100E] rounded-[40px] text-[#FFD36B] relative overflow-hidden">
-           <div className="absolute top-0 right-0 w-32 h-32 bg-[#9C1B1F]/20 rounded-full -mr-16 -mt-16 blur-3xl" />
-           <h3 className="font-black mb-3 flex items-center gap-2 italic">
-              <Star size={16} fill="currentColor" />
-              你的英雄时刻
-           </h3>
-           <p className="text-xs font-bold leading-relaxed opacity-80">
-              从最初的「誓师出征」开始，你率领小队深入漠北，经历「漠北追击」落点与「战鼓挑战」的热血。今日登顶，完成「封狼居胥」的终极跨越，这是一场属于你的英雄成长之旅，未来大路，必有回响。
-           </p>
-        </div>
-
-        {/* 5. 完赛商城推荐模块 */}
-        <section className="space-y-4">
-          <div className="flex items-center gap-2">
-            <span className="w-1 h-3 bg-[#9C1B1F] rounded-full" />
-            <h3 className="text-sm font-black text-[#38100E]">解锁限定纪念</h3>
-          </div>
-          <div className="bg-white rounded-[40px] p-6 border-2 border-[#9C1B1F]/10 shadow-lg relative overflow-hidden">
-             <div className="absolute top-0 right-0 w-24 h-24 bg-[#FFD36B]/10 rounded-full -mr-12 -mt-12 blur-2xl" />
-             <div className="flex gap-4">
-                <div className="w-24 h-24 rounded-2xl bg-gray-50 overflow-hidden shrink-0 shadow-inner">
-                   <img src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=2670&auto=format&fit=crop" className="w-full h-full object-cover" />
-                </div>
-                <div className="flex-1 space-y-2">
-                   <h4 className="text-sm font-black text-[#38100E]">霍去病实体纪念勋章</h4>
-                   <p className="text-[10px] font-bold text-[#8C6A58]/60 leading-relaxed">
-                     完成霍去病英雄体验后，你已解锁专属实体纪念购买资格。
-                   </p>
-                   <div className="flex items-center gap-2">
-                      <span className="text-sm font-black text-[#9C1B1F]">¥39</span>
-                      <span className="px-2 py-0.5 rounded-lg bg-green-50 text-[9px] font-black text-green-600 uppercase">已解锁</span>
-                   </div>
-                </div>
-             </div>
-             <button 
-               onClick={onShowMallHome}
-               className="w-full h-12 rounded-2xl bg-[#9C1B1F] text-[#FFD36B] font-black text-xs mt-6 shadow-xl shadow-[#9C171D]/10 active:scale-95 transition-all uppercase tracking-widest"
-             >
-                去火种商城看看
-             </button>
-          </div>
-        </section>
-
-        {/* 6. 其他推荐与返回 */}
-        <div className="flex gap-4 pb-12">
-           <button 
-             onClick={() => setShowPoster(true)}
-             className="flex-1 h-14 rounded-2xl bg-white border-2 border-[#9C1B1F]/20 text-[#9C1B1F] font-black text-xs flex items-center justify-center gap-2 active:scale-95 transition-all"
-           >
-              <Share2 size={16} />
-              生成分享海报
-           </button>
-           <button 
-             onClick={onGoHome}
-             className="flex-1 h-14 rounded-2xl bg-white border-2 border-black/5 text-[#38100E] font-black text-xs flex items-center justify-center gap-2 active:scale-95 transition-all"
-           >
-              <Home size={16} />
-              返回首页
-           </button>
-        </div>
-      </div>
-
-      {/* 底部操作区 */}
-      <footer className="fixed bottom-0 left-0 right-0 p-6 bg-white/95 backdrop-blur-xl border-t border-black/5 flex flex-col gap-3 z-30">
-         <button className="w-full h-14 rounded-2xl bg-[#9C1B1F] text-[#FFD36B] font-black text-sm shadow-xl active:scale-95 transition-all">
-            查看我的勋章
-         </button>
-         <button onClick={onGoHome} className="w-full h-14 rounded-2xl bg-[#FBF9F8] text-[#8C6A58] font-black text-sm active:scale-95 transition-all">
-            返回首页
-         </button>
-      </footer>
-
-      {/* 7. 分享海报弹窗 */}
-      <AnimatePresence>
-         {showPoster && (
-            <div className="fixed inset-0 z-[1200] flex items-center justify-center px-6">
-               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowPoster(false)} className="absolute inset-0 bg-black/80 backdrop-blur-md" />
-               <motion.div 
-                 initial={{ scale: 0.9, y: 30 }} 
-                 animate={{ scale: 1, y: 0 }} 
-                 exit={{ scale: 0.9, y: 30 }} 
-                 className="relative w-full max-w-sm"
-               >
-                  {/* Poster Preview */}
-                  <div className="bg-[#38100E] rounded-[48px] overflow-hidden shadow-2xl p-1">
-                     <div className="bg-white rounded-[46px] overflow-hidden flex flex-col aspect-[4/6]">
-                        <div className="h-2/5 bg-[#9C1B1F] relative overflow-hidden p-8 flex flex-col justify-end">
-                           <img 
-                              src="https://images.unsplash.com/photo-1599599810694-b5b3aa44a97d?q=80&w=2600&auto=format&fit=crop" 
-                              className="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-overlay"
-                           />
-                           <div className="relative z-10">
-                              <span className="text-[10px] font-black text-[#FFD36B] uppercase tracking-widest">Huo Qubing Experience</span>
-                              <h2 className="text-3xl font-black text-white italic">封狼居胥 · 终极见证</h2>
-                           </div>
-                        </div>
-
-                        <div className="flex-1 p-8 flex flex-col items-center text-center">
-                           <div className="w-24 h-24 rounded-full bg-[#38100E] flex items-center justify-center border-4 border-[#FFD36B] shadow-lg -mt-20 relative z-20">
-                              <Trophy size={32} className="text-[#FFD36B]" fill="currentColor" />
-                           </div>
-                           <h3 className="mt-4 text-xl font-black text-[#38100E]">冠军侯火种勋章</h3>
-                           <p className="text-[9px] font-black text-[#8C6A58]/40 uppercase tracking-[0.2em] mt-1">Earned by {new Date().toLocaleDateString()}</p>
-                           
-                           <div className="w-full h-[1px] bg-black/5 my-6" />
-
-                           <div className="grid grid-cols-2 gap-x-8 gap-y-4 w-full">
-                              <div className="text-left">
-                                 <span className="text-[10px] font-bold text-[#8C6A58]/40 block">完成任务</span>
-                                 <span className="text-2xl font-black text-[#38100E]">6/6</span>
-                              </div>
-                              <div className="text-left">
-                                 <span className="text-[10px] font-bold text-[#8C6A58]/40 block">心流峰值</span>
-                                 <span className="text-2xl font-black text-[#38100E]">88</span>
-                              </div>
-                           </div>
-
-                           <div className="mt-auto flex items-end justify-between w-full">
-                              <div className="text-left">
-                                 <div className="flex items-center gap-2 mb-1">
-                                    <Flame size={12} fill="#9C1B1F" className="text-[#9C1B1F]" />
-                                    <span className="text-xs font-black text-[#38100E]">黄火火 · 智慧文旅</span>
-                                 </div>
-                                 <p className="text-[8px] font-bold text-[#8C6A58]/60 leading-tight">
-                                    扫描左侧二维码<br/>开启你的英雄之旅
-                                 </p>
-                              </div>
-                              <div className="w-16 h-16 bg-[#FBF9F8] rounded-xl border border-black/5 p-2 shrink-0">
-                                 <QrCode size="100%" className="text-[#38100E]" />
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-
-                  {/* Poster Actions */}
-                  <div className="flex gap-4 mt-6">
-                     <button className="flex-1 h-14 rounded-2xl bg-[#9C1B1F] text-[#FFD36B] font-black text-sm flex items-center justify-center gap-2 shadow-xl shadow-black/20">
-                        <Download size={18} />
-                        保存海报
-                     </button>
-                     <button className="flex-1 h-14 rounded-2xl bg-white text-[#38100E] font-black text-sm flex items-center justify-center gap-2">
-                        <Share2 size={18} />
-                        分享好友
-                     </button>
-                  </div>
-               </motion.div>
-            </div>
-         )}
-      </AnimatePresence>
-    </motion.div>
-  );
-};
-
 /** --- Wristband Module Views --- */
 
 // 页面一：手环绑定页
-const WristbandBindingView = ({ onClose, onStartSearch }: { onClose: () => void, onStartSearch: () => void }) => (
-  <motion.div 
-    initial={{ y: '100%' }}
-    animate={{ y: 0 }}
-    exit={{ y: '100%' }}
-    transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-    className="fixed inset-0 z-[650] bg-[#FBF9F8] overflow-y-auto flex flex-col"
-  >
-    <header className="h-16 px-6 bg-white border-b border-black/5 flex items-center justify-between shrink-0 sticky top-0 z-10">
-      <button onClick={onClose} className="p-2 -ml-2 text-[#38100E]"><ArrowLeft size={24} strokeWidth={3} /></button>
-      <h2 className="text-lg font-black text-[#38100E]">绑定手环</h2>
-      <button className="p-2 -mr-2 text-[#8C6A58]/60"><Info size={22} /></button>
-    </header>
-
-    <div className="flex-1 px-8 pt-10 pb-32 space-y-10">
-      {/* 手环介绍区 */}
-      <div className="flex flex-col items-center text-center">
-        <div className="relative mb-8">
-           <div className="absolute inset-0 bg-[#FFD36B]/20 blur-3xl rounded-full" />
-           <div className="relative w-48 h-48 bg-gradient-to-br from-[#FFD36B] to-[#F39C28] rounded-[48px] flex items-center justify-center shadow-2xl shadow-black/10">
-              <Watch size={86} className="text-[#8E1217]" strokeWidth={1.5} />
-              <div className="absolute -right-2 -bottom-2 w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-lg">
-                 <Bluetooth size={24} className="text-[#3B82F6]" />
-              </div>
-           </div>
-        </div>
-        <h1 className="text-2xl font-black text-[#38100E]">绑定体验手环</h1>
-        <p className="mt-3 text-sm text-[#8C6A58] leading-relaxed font-bold px-4">
-          查看心率、血氧和心流状态，让你的英雄体验更沉浸。
-        </p>
-      </div>
-
-      {/* 数据说明区 */}
-      <div className="grid grid-cols-1 gap-4">
-        {[
-          { icon: <Activity size={20} />, title: '心率', desc: '体验过程中的心跳状态', color: 'text-red-500 bg-red-50' },
-          { icon: <Zap size={20} />, title: '血氧', desc: '身体状态参考', color: 'text-blue-500 bg-blue-50' },
-          { icon: <Flame size={20} />, title: '心流值', desc: '沉浸体验辅助指标', color: 'text-orange-500 bg-orange-50' }
-        ].map(item => (
-          <div key={item.title} className="bg-white rounded-3xl p-5 border border-black/5 shadow-sm flex items-center gap-5">
-            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${item.color}`}>
-              {item.icon}
-            </div>
-            <div>
-              <h4 className="text-sm font-black text-[#38100E]">{item.title}</h4>
-              <p className="text-[11px] font-bold text-[#8C6A58]/60 mt-0.5">{item.desc}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* 权限提示区 */}
-      <div className="p-5 bg-[#F5DDA2]/10 rounded-3xl border border-[#F5DDA2]/30 flex gap-4">
-        <Info size={18} className="text-[#9C1B1F] shrink-0 mt-0.5" />
-        <p className="text-[10px] font-bold text-[#8C6A58]/70 leading-relaxed">
-          绑定手环需要开启蓝牙权限。数据仅用于本次体验展示和个人体验回顾，不作为医疗或心理诊断依据。
-        </p>
-      </div>
-    </div>
-
-    {/* 操作按钮区 */}
-    <footer className="fixed bottom-0 left-0 right-0 p-8 bg-white/95 backdrop-blur-xl border-t border-black/5 flex flex-col gap-3">
-       <button 
-         onClick={onStartSearch}
-         className="w-full h-14 rounded-2xl bg-[#9C1B1F] text-[#FFD36B] font-black text-sm shadow-xl active:scale-95 transition-all"
-       >
-         开始搜索手环
-       </button>
-       <button 
-         onClick={onClose}
-         className="w-full h-14 rounded-2xl bg-[#FBF9F8] text-[#8C6A58] font-black text-sm active:scale-95 transition-all"
-       >
-         暂不绑定，继续体验
-       </button>
-    </footer>
-  </motion.div>
-);
-
-// 页面二：搜索设备页 (含蓝牙未开启状态)
-const SearchDeviceView = ({ onClose, onBind }: { onClose: () => void, onBind: () => void }) => {
-  const [isSearching, setIsSearching] = useState(true);
-  const [bluetoothEnabled, setBluetoothEnabled] = useState(true);
-
-  return (
-    <motion.div 
-      initial={{ x: '100%' }}
-      animate={{ x: 0 }}
-      exit={{ x: '100%' }}
-      className="fixed inset-0 z-[660] bg-[#FBF9F8] overflow-y-auto flex flex-col"
-    >
-      <header className="h-16 px-6 bg-white border-b border-black/5 flex items-center justify-between shrink-0 sticky top-0 z-10">
-        <button onClick={onClose} className="p-2 -ml-2 text-[#38100E]"><ArrowLeft size={24} strokeWidth={3} /></button>
-        <h2 className="text-lg font-black text-[#38100E]">搜索手环</h2>
-        <div className="w-10" />
-      </header>
-
-      {!bluetoothEnabled ? (
-        <div className="flex-1 flex flex-col items-center justify-center px-10 text-center space-y-8">
-           <div className="w-24 h-24 rounded-[2.5rem] bg-gray-100 flex items-center justify-center text-gray-400">
-              <EyeOff size={48} />
-           </div>
-           <div>
-              <h1 className="text-2xl font-black text-[#38100E]">蓝牙未开启</h1>
-              <p className="mt-3 text-sm font-bold text-[#8C6A58]/60">请打开手机蓝牙后重新搜索</p>
-           </div>
-           <button 
-             onClick={() => setBluetoothEnabled(true)}
-             className="w-full h-14 rounded-2xl bg-[#9C1B1F] text-[#FFD36B] font-black text-sm active:scale-95 transition-all shadow-lg"
-           >
-             重新搜索
-           </button>
-        </div>
-      ) : (
-        <div className="flex-1 p-6 space-y-10">
-          {/* 搜索状态区 */}
-          <div className="text-center py-10">
-             <div className="relative inline-block mb-6">
-                <motion.div 
-                  animate={{ scale: [1, 1.5, 1], opacity: [0.3, 0, 0.3] }}
-                  transition={{ repeat: Infinity, duration: 2 }}
-                  className="absolute inset-0 bg-[#9C1B1F] rounded-full"
-                />
-                <div className="w-20 h-20 bg-[#9C1B1F] rounded-full flex items-center justify-center text-white relative z-10 shadow-xl shadow-[#9C171D]/30">
-                   <Bluetooth size={32} />
-                </div>
-             </div>
-             <h3 className="text-lg font-black text-[#38100E]">正在搜索附近手环</h3>
-             <p className="mt-2 text-xs font-bold text-[#8C6A58]/40 uppercase tracking-widest">Searching for nearby HHF-Bands</p>
-             <p className="mt-4 text-[11px] font-bold text-[#8C6A58]/60">请确认手环已开启，并靠近手机。</p>
-          </div>
-
-          {/* 设备列表区 */}
-          <div className="space-y-4">
-             <div className="flex items-center gap-2 px-2">
-                <span className="w-1 h-3 bg-[#9C1B1F] rounded-full" />
-                <h3 className="text-sm font-black text-[#38100E]">可用设备</h3>
-             </div>
-             {[
-               { name: 'HHF-Band-001', battery: '86%', status: '可绑定', active: true },
-               { name: 'HHF-Band-002', battery: '72%', status: '可绑定', active: true },
-               { name: 'HHF-Band-003', battery: '8%', status: '建议更换', active: false },
-             ].map((device, i) => (
-               <div key={i} className={`bg-white rounded-[28px] p-5 border border-black/5 shadow-sm flex items-center justify-between transition-all ${!device.active ? 'opacity-50' : 'active:bg-gray-50'}`}>
-                 <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-[#FBF9F8] flex items-center justify-center text-[#9C1B1F]">
-                       <Watch size={24} strokeWidth={2.5} />
-                    </div>
-                    <div>
-                       <h4 className="text-sm font-black text-[#38100E]">{device.name}</h4>
-                       <div className="flex items-center gap-3 mt-1">
-                          <div className={`flex items-center gap-1 text-[10px] font-black ${device.active ? 'text-green-500' : 'text-red-500'}`}>
-                             <Battery size={12} fill="currentColor" className="opacity-50" />
-                             {device.battery}
-                          </div>
-                          <span className="text-[10px] font-bold text-[#8C6A58]/40">{device.status}</span>
-                       </div>
-                    </div>
-                 </div>
-                 <button 
-                   onClick={() => device.active && onBind()} 
-                   disabled={!device.active}
-                   className={`h-9 px-6 rounded-full font-black text-xs transition-all active:scale-95 ${device.active ? 'bg-[#9C1B1F] text-[#FFD36B]' : 'bg-gray-100 text-[#8C6A58]/20'}`}
-                 >
-                   绑定
-                 </button>
-               </div>
-             ))}
-          </div>
-
-          {/* 异常提示区 */}
-          <div className="text-center py-6 px-4">
-             <p className="text-[11px] font-bold text-[#8C6A58]/40 leading-relaxed">
-                搜索不到设备？请打开手机蓝牙，或联系现场体验官。<br/>
-                也可点击 <button onClick={() => setBluetoothEnabled(false)} className="text-[#9C1B1F] underline underline-offset-2">刷新重试</button>
-             </p>
-          </div>
-        </div>
-      )}
-    </motion.div>
-  );
-};
-
-// 页面三：绑定成功页
-const BindingSuccessView = ({ onClose, onViewStatus }: { onClose: () => void, onViewStatus: () => void }) => (
-  <motion.div 
-    initial={{ scale: 0.9, opacity: 0 }}
-    animate={{ scale: 1, opacity: 1 }}
-    exit={{ scale: 0.9, opacity: 0 }}
-    className="fixed inset-0 z-[670] bg-[#9C1B1F] overflow-y-auto flex flex-col"
-  >
-    <header className="h-16 px-6 flex items-center justify-between text-[#FFD36B] shrink-0">
-      <button onClick={onClose}><X size={24} /></button>
-      <span className="font-black">绑定出手</span>
-      <div className="w-6" />
-    </header>
-
-    <div className="flex-1 flex flex-col items-center px-10 pt-10">
-      {/* 1. 顶部成功反馈区 */}
-      <motion.div 
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.2 }}
-        className="relative mb-10"
-      >
-        <div className="absolute inset-0 bg-[#FFD36B]/20 blur-[60px] animate-pulse" />
-        <div className="relative w-32 h-32 rounded-[2.5rem] bg-[#FFD36B] flex items-center justify-center shadow-2xl shadow-black/40">
-           <Watch size={64} className="text-[#9C1B1F]" strokeWidth={1} />
-           <motion.div 
-             initial={{ scale: 0 }}
-             animate={{ scale: 1 }}
-             transition={{ delay: 0.5, type: 'spring' }}
-             className="absolute -right-3 -bottom-3 w-12 h-12 bg-[#9B171C] text-[#FFD36B] rounded-2xl flex items-center justify-center border-4 border-[#FFD36B]"
-           >
-              <Check size={24} strokeWidth={4} />
-           </motion.div>
-        </div>
-      </motion.div>
-
-      <h2 className="text-3xl font-black text-[#FFD36B]">绑定成功</h2>
-      <p className="mt-2 text-[#FFD36B]/60 font-bold uppercase tracking-widest text-xs">HHF-Band-001 已连接</p>
-
-      {/* 2. 设备状态卡 */}
-      <div className="w-full mt-12 bg-black/10 backdrop-blur-md rounded-[32px] p-6 border border-white/10 shadow-inner">
-        <div className="flex items-center gap-2 mb-6">
-           <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-           <span className="text-[10px] font-black text-[#FFD36B] uppercase tracking-widest">Device Status</span>
-        </div>
-        <div className="space-y-5">
-           {[
-             { label: '设备名称', val: 'HHF-Band-001', icon: <Watch size={14} /> },
-             { label: '连接状态', val: '已连接', icon: <Bluetooth size={14} />, color: 'text-green-400' },
-             { label: '手环电量', val: '86%', icon: <Battery size={14} /> },
-             { label: '数据更新', val: '实时同步中', icon: <RefreshCw size={14} /> }
-           ].map(item => (
-             <div key={item.label} className="flex justify-between items-center text-sm">
-                <div className="flex items-center gap-2 text-[#FFD36B]/40 font-bold">
-                   {item.icon}
-                   {item.label}
-                </div>
-                <span className={`font-black ${item.color || 'text-white'}`}>{item.val}</span>
-             </div>
-           ))}
-        </div>
-      </div>
-
-      {/* 3. 下一步提示区 */}
-      <div className="w-full mt-8 space-y-4">
-         <h3 className="text-white font-black text-sm text-center">你现在可以</h3>
-         <div className="grid grid-cols-1 gap-3">
-            {[
-              { icon: <Activity size={18} />, text: '查看心流状态' },
-              { icon: <Edit2 size={18} />, text: '记录体验过程' },
-              { icon: <FileText size={18} />, text: '完成后生成体验摘要' }
-            ].map((cap, i) => (
-              <div key={i} className="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/5">
-                 <div className="text-[#FFD36B]">{cap.icon}</div>
-                 <span className="text-xs font-black text-white/80">{cap.text}</span>
-              </div>
-            ))}
-         </div>
-      </div>
-    </div>
-
-    {/* 操作按钮区 */}
-    <footer className="p-8 pb-12 flex flex-col gap-3 shrink-0">
-       <button 
-         onClick={onViewStatus}
-         className="h-14 rounded-2xl bg-[#FFD36B] text-[#9C1B1F] font-black shadow-2xl active:scale-95 transition-all text-sm uppercase tracking-wider"
-       >
-         查看心流状态
-       </button>
-       <button 
-         onClick={onClose}
-         className="h-14 rounded-2xl border-2 border-[#FFD36B]/20 text-[#FFD36B] font-black active:scale-95 transition-all text-sm"
-       >
-         返回当前体验
-       </button>
-    </footer>
-  </motion.div>
-);
-
 // --- My Profile Module Views ---
 
 const MyProfileView = ({ 
@@ -1029,82 +507,6 @@ const MyProfileView = ({
 // 页面一：设置页
 // 页面二：帮助中心页
 
-const FlowStatusView = ({ onClose, onDisconnect }: { onClose: () => void, onDisconnect: () => void }) => {
-  const [isConnected, setIsConnected] = useState(true);
-  const [showConfirmUnbind, setShowConfirmUnbind] = useState(false);
-
-  return (
-    <motion.div 
-      initial={{ y: '100%' }}
-      animate={{ y: 0 }}
-      exit={{ y: '100%' }}
-      className="fixed inset-0 z-[680] bg-[#FBF9F8] overflow-y-auto flex flex-col"
-    >
-      <header className="h-16 px-6 bg-white border-b border-black/5 flex items-center justify-between shrink-0 sticky top-0 z-10">
-        <button onClick={onClose} className="p-2 -ml-2 text-[#38100E]"><ArrowLeft size={24} strokeWidth={3} /></button>
-        <h2 className="text-lg font-black text-[#38100E]">心流状态</h2>
-        <button className="p-2 -mr-2 text-[#8C6A58]/60"><Info size={22} /></button>
-      </header>
-
-      {!isConnected ? (
-        <div className="flex-1 flex flex-col items-center justify-center px-10 text-center space-y-8 pb-32">
-           <div className="w-24 h-24 rounded-full bg-red-50 text-red-500 flex items-center justify-center">
-              <LogOut size={40} className="rotate-180" />
-           </div>
-           <div>
-              <h3 className="text-xl font-black text-[#38100E]">手环未连接</h3>
-              <p className="mt-2 text-sm font-bold text-[#8C6A58] leading-relaxed">连接手环以实时同步你的心流数据</p>
-           </div>
-           <button className="h-14 px-8 rounded-2xl bg-[#9C1B1F] text-[#FFD36B] font-black text-sm active:scale-95 transition-all shadow-xl">立即连接</button>
-        </div>
-      ) : (
-        <div className="flex-1 p-6 space-y-8 pb-32">
-          {/* 这里是心流数据展示逻辑，之前已经写过了 */}
-          <div className="bg-white rounded-[40px] p-8 text-center space-y-4 border border-black/5 shadow-sm">
-             <div className="text-[10px] font-black text-[#8C6A58]/40 uppercase tracking-widest">当前心流值</div>
-             <div className="text-6xl font-black text-[#38100E] italic">88</div>
-             <div className="inline-flex items-center gap-2 px-3 py-1 bg-green-50 text-green-500 rounded-full text-[10px] font-black">
-                <Activity size={12} /> 状态极其稳定
-             </div>
-          </div>
-          
-          <button 
-            onClick={() => setShowConfirmUnbind(true)}
-            className="w-full h-14 rounded-2xl border-2 border-red-500/10 text-red-500 font-black text-sm active:bg-red-50 transition-all"
-          >
-             断开手环连接
-          </button>
-        </div>
-      )}
-
-      <AnimatePresence>
-        {showConfirmUnbind && (
-          <div className="fixed inset-0 z-[700] flex items-center justify-center px-10">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowConfirmUnbind(false)} className="absolute inset-0 bg-[#38100E]/80 backdrop-blur-md" />
-            <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }} className="relative w-full bg-white rounded-[40px] p-8 text-center shadow-2xl">
-              <h3 className="text-xl font-black text-[#38100E]">确认断开连接？</h3>
-              <p className="mt-2 text-sm font-bold text-[#8C6A58]">断开后将停止同步心率和心流数据。</p>
-              <div className="mt-8 grid grid-cols-2 gap-3">
-                <button onClick={() => setShowConfirmUnbind(false)} className="h-14 rounded-2xl bg-[#FBF9F8] text-[#8C6A58] font-black text-sm">取消</button>
-                <button 
-                  onClick={() => {
-                    setIsConnected(false);
-                    setShowConfirmUnbind(false);
-                    onDisconnect();
-                  }}
-                  className="h-14 rounded-2xl bg-[#9C1B1F] text-[#FFD36B] font-black text-sm shadow-xl shadow-[#9C1B1F]/20"
-                >
-                  确认断开
-                </button>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-    </motion.div>
-  );
-};
-
 /** --- Global Status & Action Components --- */
 
 const HomeView = ({ 
@@ -1280,7 +682,7 @@ const CHART_DATA_TRENDS = [
 ];
 
 const CHART_DATA_SOURCE = [
-  { name: '北京市内', value: 48.23, color: '#3B82F6' },
+  { name: '北京市内', value: 48.23, color: '#9C1B1F' },
   { name: '京津冀', value: 27.45, color: '#6366F1' },
   { name: '长三角', value: 12.36, color: '#F59E0B' },
   { name: '珠三角', value: 6.21, color: '#EC4899' },
@@ -1497,7 +899,7 @@ const MeView = ({ userProfile, setIsLoggedIn, setAuthStep }: { userProfile: any,
               <span className="text-sm font-bold text-on-surface shrink-0">根器</span>
               <div className="flex gap-3">
                 {[1, 2, 3, 4, 5].map(i => (
-                  <div key={i} className={`w-6 h-6 rounded-md flex items-center justify-center ${i === 1 ? 'bg-blue-100 text-blue-500' : 'bg-gray-100 text-gray-400'}`}>
+                  <div key={i} className={`w-6 h-6 rounded-md flex items-center justify-center ${i === 1 ? 'bg-[#FFF1D0] text-[#9C1B1F]' : 'bg-gray-100 text-gray-400'}`}>
                     <Shield size={14} fill={i === 1 ? 'currentColor' : 'none'} />
                   </div>
                 ))}
@@ -1982,8 +1384,8 @@ const ExperienceTabHomeView = ({
                        </div>
                        <span className="text-xl font-black text-[#38100E]">{heartRate} <span className="text-[10px] font-bold text-[#8C6A58]/40">bpm</span></span>
                     </div>
-                    <div className="text-center p-4 rounded-3xl bg-blue-50 border border-blue-100">
-                       <div className="flex items-center justify-center gap-2 mb-1 text-blue-600">
+                    <div className="text-center p-4 rounded-3xl bg-[#FFF1D0] border border-[#F5DDA2]">
+                       <div className="flex items-center justify-center gap-2 mb-1 text-[#9C1B1F]">
                           <Activity size={14} />
                           <span className="text-[10px] font-black uppercase">SpO2</span>
                        </div>
@@ -2104,246 +1506,7 @@ const ExperienceTabHomeView = ({
   );
 };
 
-const MallHomeView = ({ 
-  onClose, 
-  onSelectProduct, 
-  onViewOrders 
-}: { 
-  onClose: () => void, 
-  onSelectProduct: (product: any) => void,
-  onViewOrders: () => void
-}) => {
-  const [activeCategory, setActiveCategory] = useState('全部');
-  
-  const categories = [
-    { id: 'all', name: '全部', icon: <Menu size={14} /> },
-    { id: 'medal', name: '英雄勋章', icon: <Award size={14} /> },
-    { id: 'memento', name: '完赛纪念', icon: <Trophy size={14} /> },
-    { id: 'city', name: '城市限定', icon: <MapPin size={14} /> },
-    { id: 'gear', name: '英雄装备', icon: <Zap size={14} /> },
-    { id: 'hidden', name: '隐藏路线', icon: <Compass size={14} /> },
-  ];
-
-  const products = [
-    {
-      id: 'p1',
-      name: '霍去病实体纪念勋章',
-      price: 39,
-      unlocked: true,
-      tag: '已解锁',
-      desc: '完成霍去病体验后可购买',
-      category: '英雄勋章',
-      image: 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=2670&auto=format&fit=crop',
-    },
-    {
-      id: 'p2',
-      name: '冠军侯火种挂件',
-      price: 29,
-      unlocked: true,
-      tag: '已解锁',
-      desc: '完赛纪念周边',
-      category: '完赛纪念',
-      image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=2680&auto=format&fit=crop',
-    },
-    {
-      id: 'p3',
-      name: '岳飞精忠勋章',
-      price: 39,
-      unlocked: false,
-      tag: '未解锁',
-      desc: '完成岳飞英雄体验',
-      category: '英雄勋章',
-      image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?q=80&w=2732&auto=format&fit=crop',
-    },
-    {
-      id: 'p4',
-      name: '花木兰巾帼徽章',
-      price: 39,
-      unlocked: false,
-      tag: '未解锁',
-      desc: '完成花木兰英雄体验',
-      category: '英雄勋章',
-      image: 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=2670&auto=format&fit=crop',
-    }
-  ];
-
-  const filteredProducts = activeCategory === '全部' 
-    ? products 
-    : products.filter(p => p.category === activeCategory);
-
-  return (
-    <motion.div 
-      initial={{ x: '100%' }}
-      animate={{ x: 0 }}
-      exit={{ x: '100%' }}
-      className="fixed inset-0 z-[700] bg-[#FBF9F8] overflow-y-auto flex flex-col"
-    >
-      <header className="h-16 px-6 bg-white border-b border-black/5 flex items-center justify-between shrink-0 sticky top-0 z-20">
-        <button onClick={onClose} className="p-2 -ml-2 text-[#38100E]"><ArrowLeft size={24} strokeWidth={3} /></button>
-        <h2 className="text-lg font-black text-[#38100E]">火种商城</h2>
-        <button onClick={onViewOrders} className="p-2 -mr-2 text-[#38100E]"><ShoppingBag size={22} /></button>
-      </header>
-
-      <div className="flex-1 pb-12">
-        {/* 用户资产区 */}
-        <section className="px-6 pt-6">
-          <div className="bg-[#38100E] rounded-[32px] p-6 text-[#FFD36B] relative overflow-hidden shadow-xl">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-[#9C1B1F]/30 rounded-full -mr-12 -mt-12 blur-3xl" />
-            <div className="relative z-10 flex justify-between items-end">
-              <div className="space-y-4">
-                <div className="flex gap-6">
-                  <div className="space-y-0.5">
-                    <div className="flex items-center gap-1">
-                      <Flame size={14} fill="currentColor" />
-                      <span className="text-xl font-black">120</span>
-                    </div>
-                    <span className="text-[10px] font-bold text-[#FFD36B]/40 uppercase tracking-widest">火种</span>
-                  </div>
-                  <div className="space-y-0.5">
-                    <div className="flex items-center gap-1">
-                      <Coins size={14} />
-                      <span className="text-xl font-black">30</span>
-                    </div>
-                    <span className="text-[10px] font-bold text-[#FFD36B]/40 uppercase tracking-widest">银票</span>
-                  </div>
-                  <div className="space-y-0.5">
-                    <div className="flex items-center gap-1">
-                      <Award size={14} />
-                      <span className="text-xl font-black">3</span>
-                    </div>
-                    <span className="text-[10px] font-bold text-[#FFD36B]/40 uppercase tracking-widest">勋章</span>
-                  </div>
-                </div>
-                <p className="text-[11px] font-medium text-[#FFD36B]/60 leading-relaxed">
-                  “完成英雄体验，可解锁更多限定纪念。”
-                </p>
-              </div>
-              <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center border border-white/5">
-                <Sparkles size={24} className="text-[#FFD36B]" />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Mall Banner */}
-        <section className="px-6 mt-6">
-          <div className="bg-gradient-to-br from-[#9C1B1F] to-[#711619] rounded-[32px] p-6 text-white relative overflow-hidden shadow-lg">
-            <div className="absolute right-0 bottom-0 w-40 h-40 bg-[#FFD36B]/10 rounded-full -mr-16 -mb-16 blur-2xl" />
-            <h3 className="text-xl font-black mb-1">把你的英雄时刻带回家</h3>
-            <p className="text-xs text-white/60 font-medium leading-relaxed max-w-[200px]">
-              完成体验后解锁专属勋章、城市限定与英雄纪念。
-            </p>
-            <button className="mt-6 h-10 px-6 rounded-xl bg-[#FFD36B] text-[#38100E] font-black text-xs shadow-lg active:scale-95 transition-all">
-              查看已解锁
-            </button>
-          </div>
-        </section>
-
-        {/* 分类筛选 */}
-        <div className="mt-8 px-6 overflow-x-auto no-scrollbar flex gap-4 pb-2">
-          {categories.map(cat => (
-            <button 
-              key={cat.id}
-              onClick={() => setActiveCategory(cat.name)}
-              className={`shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-black transition-all ${activeCategory === cat.name ? 'bg-[#38100E] text-[#FFD36B] shadow-xl' : 'bg-white border border-black/5 text-[#8C6A58]'}`}
-            >
-              {cat.icon}
-              {cat.name}
-            </button>
-          ))}
-        </div>
-
-        {/* 已解锁专区 */}
-        <section className="mt-8 px-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-4 rounded-full bg-[#9C1B1F]" />
-              <h3 className="text-lg font-black text-[#38100E]">你已解锁</h3>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            {products.filter(p => p.unlocked).map(product => (
-              <motion.div 
-                key={product.id}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => onSelectProduct(product)}
-                className="bg-white rounded-[32px] overflow-hidden border border-black/5 shadow-sm"
-              >
-                <div className="aspect-square bg-gray-50 relative">
-                  <img src={product.image} className="w-full h-full object-cover" alt={product.name} />
-                  <div className="absolute top-3 left-3 px-2 py-1 bg-green-500 text-white text-[9px] font-black rounded-lg shadow-lg">
-                    {product.tag}
-                  </div>
-                </div>
-                <div className="p-4 space-y-2">
-                  <h4 className="text-xs font-black text-[#38100E] line-clamp-1">{product.name}</h4>
-                  <div className="flex items-baseline justify-between">
-                    <span className="text-sm font-black text-[#9C1B1F]">¥{product.price}</span>
-                    <span className="text-[9px] font-bold text-[#8C6A58]/40">限定</span>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-        {/* 未解锁专区 */}
-        <section className="mt-10 px-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-4 rounded-full bg-[#8C6A58]/20" />
-              <h3 className="text-lg font-black text-[#38100E]">继续体验可解锁</h3>
-            </div>
-          </div>
-          <div className="space-y-4">
-            {products.filter(p => !p.unlocked).map(product => (
-              <motion.div 
-                key={product.id}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => onSelectProduct(product)}
-                className="bg-white rounded-[32px] p-4 border border-black/5 flex gap-4 grayscale opacity-60"
-              >
-                <div className="w-24 h-24 rounded-2xl bg-gray-50 overflow-hidden relative shrink-0">
-                  <img src={product.image} className="w-full h-full object-cover" alt={product.name} />
-                  <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                    <Lock size={20} className="text-white" />
-                  </div>
-                </div>
-                <div className="flex-1 py-1 flex flex-col justify-between">
-                  <div>
-                    <h4 className="text-sm font-black text-[#38100E]">{product.name}</h4>
-                    <p className="text-[10px] text-[#8C6A58] mt-1 font-bold">解锁条件：{product.desc}</p>
-                  </div>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-sm font-black text-[#9C1B1F]">¥{product.price}</span>
-                    <span className="px-2 py-0.5 rounded-lg bg-gray-100 text-[9px] font-black text-gray-400">未解锁</span>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-        {/* 推荐体验转化区 */}
-        <section className="mt-12 px-6">
-          <div className="bg-[#F5DDA2]/20 rounded-[40px] p-8 text-center border-2 border-dashed border-[#F5DDA2]">
-            <div className="mx-auto w-12 h-12 rounded-full bg-[#9C1B1F] text-[#FFD36B] flex items-center justify-center mb-4 shadow-lg shadow-[#9C171D]/20">
-              <Swords size={24} />
-            </div>
-            <h3 className="text-lg font-black text-[#38100E]">想解锁更多？</h3>
-            <p className="mt-2 text-xs text-[#8C6A58] font-bold leading-relaxed mb-6">
-              还有更多英雄史诗等你开启，<br/>每个挑战完成后都有专属惊喜。
-            </p>
-            <div className="flex gap-3">
-              <button className="flex-1 h-12 rounded-2xl bg-[#9C1B1F] text-[#FFD36B] font-black text-[11px] shadow-xl shadow-[#9C171D]/10">去体验其他英雄</button>
-              <button className="flex-1 h-12 rounded-2xl bg-white border border-black/5 text-[#38100E] font-black text-[11px]">查看今日可玩</button>
-            </div>
-          </div>
-        </section>
-      </div>
-    </motion.div>
-  );
-};
+const MallHomeView = MallHomePage;
 
 const MallProductDetailView = ({ 
   product, 
@@ -3584,7 +2747,7 @@ export default function App() {
       </AnimatePresence>
       <AnimatePresence>
         {showRaceResult && (
-          <RaceResultView 
+          <RaceResultPage
             onClose={() => setShowRaceResult(false)}
             onGoHome={() => {
               setShowRaceResult(false);
@@ -3668,7 +2831,7 @@ export default function App() {
       </AnimatePresence>
       <AnimatePresence>
         {showWristbandBinding && (
-          <WristbandBindingView 
+          <WristbandBindingPage
             onClose={() => setShowWristbandBinding(false)}
             onStartSearch={() => {
               setShowWristbandBinding(false);
@@ -3679,7 +2842,7 @@ export default function App() {
       </AnimatePresence>
       <AnimatePresence>
         {showSearchDevice && (
-          <SearchDeviceView 
+          <SearchDevicePage
             onClose={() => setShowSearchDevice(false)}
             onBind={() => {
               setShowSearchDevice(false);
@@ -3691,7 +2854,7 @@ export default function App() {
       </AnimatePresence>
       <AnimatePresence>
         {showBindingSuccess && (
-          <BindingSuccessView 
+          <BindingSuccessPage
             onClose={() => setShowBindingSuccess(false)}
             onViewStatus={() => {
               setShowBindingSuccess(false);
@@ -3702,7 +2865,7 @@ export default function App() {
       </AnimatePresence>
       <AnimatePresence>
         {showFlowStatus && (
-          <FlowStatusView 
+          <FlowStatusPage
             onClose={() => setShowFlowStatus(false)}
             onDisconnect={() => {
               setIsBandBound(false);

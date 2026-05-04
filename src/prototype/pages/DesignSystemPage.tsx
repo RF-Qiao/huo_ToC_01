@@ -191,7 +191,7 @@ function ProductBlueprintView() {
     { title: '体验', pos: '线下实时英雄任务主控页', color: '#9C1B1F', items: ['当前任务', '任务详情', '地图打卡', '拍照提交', '任务奖励', '完赛结果', '心流状态', '联系体验官'] },
     { title: '英雄', pos: '英雄内容中心与购票转化', color: '#FFD36B', items: ['英雄列表', '英雄分类', '英雄详情', '路线详情', '任务预览', '立即购票'] },
     { title: '队伍', pos: '组队协作与真实社交中心', color: '#10B981', items: ['创建队伍', '输入队伍码', '扫码加入', '队伍详情', '成员列表', '集合提醒'] },
-    { title: '我的', pos: '用户资产与英雄成长档案', color: '#3B82F6', items: ['我的订单', '体验记录', '我的勋章', '火种商城', '手环管理', '客服帮助', '设置', '隐私协议'] },
+    { title: '我的', pos: '用户资产与英雄成长档案', color: '#9C1B1F', items: ['我的订单', '体验记录', '我的勋章', '火种商城', '手环管理', '客服帮助', '设置', '隐私协议'] },
   ];
 
   const mainPath = [
@@ -260,7 +260,7 @@ function ProductBlueprintView() {
 
       <section className="space-y-6">
         <div className="flex items-center gap-2 px-1">
-          <div className="w-1 h-3 bg-blue-500 rounded-full" />
+          <div className="w-1 h-3 bg-[#9C1B1F] rounded-full" />
           <h3 className="text-sm font-black text-[#38100E]">辅助功能链路</h3>
         </div>
         <div className="bg-white rounded-[32px] p-8 border border-black/5 shadow-sm space-y-8">
@@ -268,9 +268,9 @@ function ProductBlueprintView() {
             {[
               { flow: '核心闭环', route: '首页 → 英雄详情 → 购票 → 体验 → 完赛', color: 'bg-red-500' },
               { flow: '社交协作', route: '首页 → 队伍 → 创建/加入 → 队伍详情', color: 'bg-green-500' },
-              { flow: '智能硬件', route: '首页 → 绑定手环 → 心流状态 → 体验', color: 'bg-blue-500' },
+              { flow: '智能硬件', route: '首页 → 绑定手环 → 心流状态 → 体验', color: 'bg-[#9C1B1F]' },
               { flow: '资产记录', route: '我的 → 订单 → 核销码', color: 'bg-yellow-500' },
-              { flow: '商城转化', route: '我的 → 火种商城 → 商品详情', color: 'bg-purple-500' },
+              { flow: '商城转化', route: '我的 → 火种商城 → 商品详情', color: 'bg-[#F39C28]' },
             ].map((f, i) => (
               <div key={i} className="flex flex-col gap-2 p-3 rounded-2xl hover:bg-[#FBF9F8] transition-colors border border-transparent hover:border-black/5">
                 <div className="flex items-center justify-between">
@@ -292,7 +292,7 @@ function ProductBlueprintView() {
               {[
                 { label: '红色: 核心体验链路', desc: '购票、打卡与主交互', color: 'bg-red-500' },
                 { label: '金色: 奖励/勋章链路', desc: '任务完成与资产结算', color: 'bg-yellow-500' },
-                { label: '蓝色: 手环心流链路', desc: '生理监测与沉浸数据', color: 'bg-blue-500' },
+                { label: '暖色: 手环心流链路', desc: '生理监测与沉浸数据', color: 'bg-[#9C1B1F]' },
                 { label: '绿色: 队伍协作链路', desc: '组队、社交与集合', color: 'bg-green-500' },
                 { label: '灰色: 设置/合规链路', desc: '协议、客服与系统设置', color: 'bg-gray-400' },
               ].map((leg, i) => (
